@@ -1,0 +1,104 @@
+// needed for random numbers
+#include <cstdlib> 
+// basic input and output headers
+#include <iostream> 
+// so that i dont have to use std::"...."  in every other output / input
+using namespace std; 
+
+int main() 
+{ 
+	// declare the variable used for the wishes
+	int NumberOfWishes = 0;
+	int randN = 0;
+	int randNcharacter = 0;
+	bool gotanything = false;
+	// array of 4 star characters
+	string fourstar[] = {"Amber", "Barbara", "Beidou", "Bennett", "Chongyun", "Fischl", "Kaeya", "Lisa", "Ningguang", "Noelle", "Razor", "Sucrose", "Xiangling", "Xingqiu", "Diona", "Xinyan", "Rosaria", "Yanfei", "Sayu", "Kujou Sara", "Thoma", "Gorou", "Yun Jin", "Kuki Shinobu", "Heizou", "Collei", "Dori", "Candace", "Layla", "Faruzan", "Yaoyao", "Mika", "Kaveh", "Kirara", "Lynette", "Freminet", "Charlotte", "Chevreuse", "Gaming"}; 
+	int fourstarN = 39;
+	// array of fives star characters
+	string fivestar[] = {"Abedo", "Alhaitham", "Aloy", "Ayaka", "Ayato", "Baizhu", "Cyno", "Dehya", "Diluc", "Eula", "Furina", "Ganyu", "Hu Tao", "Itto", "Jean", "Kazuha", "Keqing", "Klee", "Kokomi", "Lyney", "Mona", "Nahida", "Navia", "Neuvillette", "Nilou", "Qiqi", "Raiden", "Shenhe", "Tartaglia", "Tighnari", "Venti", "Wanderer", "Wriothesley", "Xianyun", "Xiao", "Yae Miko", "Yelan", "Yoimiya", "Zhongli"};
+	int fivestarN = 38;
+	// characters got
+	string charactersgot = "";
+	// int 'N' is the maximum number used to se the probability for the stars.(5* is 0.6% = 0.006p if -
+	// - converted to how many pulls for 1 5* , 100% divided by 0.6% .it will result to 166.666... rounded to 167 )
+	int N = 167; 
+	// Number of 5*s and 4*s accuired duing the loop
+	int fivestars = 0;
+    int fourstars = 0;
+	// five star pity , resets to 0 if you recieve a 5* otherwise increases until 90 and get reset anyways
+    int fivestarpity = 0;
+	// set up for using randon number generator (RNG)
+    srand((unsigned) time(NULL));
+
+
+	// Input for how many times the program will loop
+    cout << "Number of Wishes ";
+    cin >> NumberOfWishes;
+
+	// main loop for the pulls
+	// just a for loop
+	for (int wishes = 1; wishes <= NumberOfWishes; wishes++){
+
+		// set got something to false.
+		gotanything = false;
+		// generates a random number between 1 and 167 .
+		randN = 1 + (rand() % N);
+		// prints how many wishes you have done
+		cout<< " currently on " << wishes << " wishes done\n";
+		
+
+		// if the random number generated is 160, which is 1 of the number between a range if 167.
+		// so, 1 divided by 167. which gives us around 5.988023952x10^-3 around 0.006p or 0.6% chance
+		// > 90 condition allows the pity system to be active and in use for the playes. more than 90 then give 5 star.
+		if (randN == 160 || fivestarpity > 90){
+			//increase the number of 5* by 1 since you got the 5 *
+			fivestars += 1;
+            cout << "you got a 5 star\n";
+			cout << " you got " << fivestar[randNcharacter] << endl;
+			charactersgot.append("A 5 star " + fivestar[randNcharacter] + ", \n");
+			// resetst the pity to 0 if you get a 5* or if the pity system is activated
+            fivestarpity = 0;
+			// set gotanything to true
+			gotanything = true;
+		}
+
+
+		// same as 5* but , it is in a range beteen 12 and 2 because that gives us 10 numbers to be in range.
+		// so, 10 divided by 167 is 5.'.'. % simmalar with the percentage of genshin 4* chance
+		// wished % 10 == 0 garuntees that the user will get atleast a 4* every 10 pulls.
+        if ((randN < 12 && randN > 2) || wishes % 10 == 0){
+			// get a random number to get a 4 star
+			randNcharacter = 0 + (rand() % fourstarN);
+			// increase the number of 4* since you got one.
+			fourstars += 1;
+            cout << "you got a 4 star\n";
+			// use the random number to find a suitable 4 star for the wishes
+			cout << " you got " << fourstar[randNcharacter] << endl;
+			// add the character you got to the stiring list of the characters
+			charactersgot.append("A 4 star " + fourstar[randNcharacter] + ", \n");
+			// increase the 5* pity since this inst a 5* , its a 4*
+			fivestarpity++;
+			// set gotanythin to true
+			gotanything = true;
+		}
+		
+		
+		else if ( not gotanything) {
+			// basically , you got a 3 start weapon .a 3 * weapon is nothing . so, you basically got nothing.
+            cout << "you got nothing\n\n";
+			// if you didnt get anything then increase the 5* pity.
+            fivestarpity++;
+        }
+		
+	}
+
+	// shows you the number of 5*s and 4*s you got
+	cout << "you got \n" << charactersgot << endl ;
+	cout << fivestars << " number of 5 stars found\n";
+    cout << fourstars << " number of 4 stars found\n";
+	cout << "press enter to collapse the window";
+	cin >> NumberOfWishes;
+	
+	return 0; 
+} 
